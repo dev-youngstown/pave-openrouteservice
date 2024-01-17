@@ -23,16 +23,16 @@ ors:
       cache_path: ./ors-core/data/elevation_cache
 
     profiles:
-    walking:
-       profile: foot-walking
-       encoder_options:
-       block_fords: false
-       elevation: true
-       ext_storages:
-         WayCategory:
-         WaySurfaceType:
-         HillIndex:
-         TrailDifficulty:
+      walking:
+         profile: foot-walking
+         encoder_options:
+         block_fords: false
+         elevation: true
+         ext_storages:
+           WayCategory:
+           WaySurfaceType:
+           HillIndex:
+           TrailDifficulty:
       # car:
       #   profile: driving-car
       #   elevation: true
