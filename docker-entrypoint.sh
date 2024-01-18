@@ -54,7 +54,7 @@ fi
 
 if [ ! -f "${ors_base}/ors-core/data/osm_file.pbf" ]; then
   echo "download osm_file.pbf"
-  wget https://download.geofabrik.de/north-america/us-latest.osm.pbf -O /ors-core/data/osm_file.pbf
+  wget https://download.geofabrik.de/north-america/us-latest.osm.pbf -O ${ors_base}/ors-core/data/osm_file.pbf
 fi
 
 # so docker can stop the process gracefully
