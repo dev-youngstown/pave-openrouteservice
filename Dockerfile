@@ -44,7 +44,7 @@ COPY pom.xml /ors-core/pom.xml
 COPY ors-report-aggregation /ors-core/ors-report-aggregation
 
 RUN wget https://download.geofabrik.de/north-america/us/ohio-latest.osm.pbf
-RUN mv ohio-latest.osm.pbf /ors-api/src/test/files
+RUN mv ohio-latest.osm.pbf ./ors-api/src/test/files
 
 # Build the project and ignore the report aggregation module as not needed for the API
 RUN mvn package -DskipTests -pl '!ors-report-aggregation'
@@ -55,7 +55,6 @@ FROM amazoncorretto:17.0.7-alpine3.17 as publish
 # Build ARGS
 ARG UID=1000
 ARG GID=1000
-ARG OSM_FILE=./ors-api/src/test/files/ohio-latest.osm.pbf
 ARG BASE_FOLDER=/home/ors
 
 # Runtime ENVs for tomcat
@@ -81,7 +80,8 @@ COPY --chown=ors:ors --from=build /ors-core/ors-api/target/ors.war ${BASE_FOLDER
 COPY --chown=ors:ors --from=build /ors-core/ors-api/src/main/resources/log4j.properties ${BASE_FOLDER}/tomcat/conf/logging.properties
 COPY --chown=ors:ors ./docker-entrypoint.sh ${BASE_FOLDER}/docker-entrypoint.sh
 COPY --chown=ors:ors ./ors-api/ors-config.yml ${BASE_FOLDER}/tmp/ors-config.yml
-COPY --chown=ors:ors ./$OSM_FILE ${BASE_FOLDER}/tmp/osm_file.pbf
+COPY --from=build --chown=ors:ors ./ors-api/src/test/files/ohio-latest.osm.pbf ${BASE_FOLDER}/tmp/osm_file.pbf
+
 
 USER ${UID}:${GID}
 
