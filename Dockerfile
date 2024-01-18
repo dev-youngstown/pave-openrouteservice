@@ -38,12 +38,12 @@ ENV MAVEN_CLI_OPTS="--batch-mode --errors --fail-at-end --show-version -Dinstall
 
 WORKDIR /ors-core
 
-RUN wget https://download.geofabrik.de/north-america/us/ohio-latest.osm.pbf -O ./ors-api/src/test/files/ohio-latest.osm.pbf
-
 COPY ors-api /ors-core/ors-api
 COPY ors-engine /ors-core/ors-engine
 COPY pom.xml /ors-core/pom.xml
 COPY ors-report-aggregation /ors-core/ors-report-aggregation
+
+RUN wget https://download.geofabrik.de/north-america/us/ohio-latest.osm.pbf -O ./ors-api/src/test/files/ohio-latest.osm.pbf
 
 # Build the project and ignore the report aggregation module as not needed for the API
 RUN mvn package -DskipTests -pl '!ors-report-aggregation'
