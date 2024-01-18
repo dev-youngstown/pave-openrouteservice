@@ -38,6 +38,8 @@ ENV MAVEN_CLI_OPTS="--batch-mode --errors --fail-at-end --show-version -Dinstall
 
 WORKDIR /ors-core
 
+RUN wget https://download.geofabrik.de/north-america/us/ohio-latest.osm.pbf -O ./ors-api/src/test/files/ohio-latest.osm.pbf
+
 COPY ors-api /ors-core/ors-api
 COPY ors-engine /ors-core/ors-engine
 COPY pom.xml /ors-core/pom.xml
@@ -52,7 +54,7 @@ FROM amazoncorretto:17.0.7-alpine3.17 as publish
 # Build ARGS
 ARG UID=1000
 ARG GID=1000
-ARG OSM_FILE=./ors-api/src/test/files/heidelberg.osm.gz
+ARG OSM_FILE=./ors-api/src/test/files/ohio-latest.osm.pbf
 ARG BASE_FOLDER=/home/ors
 
 # Runtime ENVs for tomcat
@@ -82,7 +84,7 @@ COPY --chown=ors:ors ./$OSM_FILE ${BASE_FOLDER}/tmp/osm_file.pbf
 
 USER ${UID}:${GID}
 
-ENV BUILD_GRAPHS="False"
+ENV BUILD_GRAPHS="True"
 ENV ORS_CONFIG_LOCATION=ors-conf/ors-config.yml
 
 # Start the container
