@@ -53,8 +53,8 @@ if [ ! -f "${ors_base}/ors-conf/ors-config.yml" ]; then
 fi
 
 if [ ! -f "${ors_base}/ors-core/data/osm_file.pbf" ]; then
-  echo "Copy osm_file.pbf"
-  cp -f "${ors_base}/tmp/osm_file.pbf" "${ors_base}/ors-core/data/osm_file.pbf"
+  echo "download osm_file.pbf"
+  wget https://download.geofabrik.de/north-america/us-latest.osm.pbf -O /ors-core/data/osm_file.pbf
 fi
 
 # so docker can stop the process gracefully
