@@ -43,7 +43,7 @@ COPY ors-engine /ors-core/ors-engine
 COPY pom.xml /ors-core/pom.xml
 COPY ors-report-aggregation /ors-core/ors-report-aggregation
 
-RUN wget https://download.geofabrik.de/north-america/us/us-latest.osm.pbf -O /ors-core/us-latest.osm.pbf
+RUN wget https://download.geofabrik.de/north-america/us-latest.osm.pbf -O /ors-core/us-latest.osm.pbf
 
 
 # Build the project and ignore the report aggregation module as not needed for the API
