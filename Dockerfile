@@ -49,7 +49,7 @@ COPY ors-report-aggregation /ors-core/ors-report-aggregation
 RUN mvn package -DskipTests -pl '!ors-report-aggregation'
 
 # build final image, just copying stuff inside
-FROM ubuntu:latest as publish
+FROM amazoncorretto:17.0.7-alpine3.17 as publish
 
 # Build ARGS
 ARG UID=1000
@@ -62,17 +62,50 @@ ENV CATALINA_HOME=${BASE_FOLDER}/tomcat
 ENV CATALINA_PID=${BASE_FOLDER}/tomcat/temp/tomcat.pid
 
 # Set the default language
-ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
+ENV LANG='en_US' LANGUAGE='en_US' LC_ALL='en_US'
+
+# Install dependencies required for osm2pgsql
+RUN apk add --no-cache bash=~'5' openssl=~'3' \
+    git \
+    build-base \
+    cmake \
+    boost-dev \
+    expat-dev \
+    bzip2-dev \
+    zlib-dev \
+    lua-dev \
+    proj-dev \
+    geos-dev \
+    gdal-dev \
+    postgresql-dev
+
+# Clone the osm2pgsql source code and compile
+RUN git clone https://github.com/openstreetmap/osm2pgsql.git /tmp/osm2pgsql && \
+    mkdir /tmp/osm2pgsql/build && \
+    cd /tmp/osm2pgsql/build && \
+    cmake .. && \
+    make && \
+    make install
+
+# Clone the osm2pgsql source code and compile
+RUN git clone https://github.com/openstreetmap/osm2pgsql.git /tmp/osm2pgsql && \
+    mkdir /tmp/osm2pgsql/build && \
+    cd /tmp/osm2pgsql/build && \
+    cmake .. && \
+    make && \
+    make install
+
+# Cleanup
+RUN apk del git build-base cmake && \
+    rm -rf /tmp/osm2pgsql && \
+    rm -rf /var/cache/apk/*
 
 # Setup the target system with the right user and folders.
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends bash openssl osm2pgsql locales && \
-    locale-gen en_US.UTF-8 && \
-    addgroup --gid ${GID} ors && \
-    adduser --disabled-password --gecos '' --home ${BASE_FOLDER} --uid ${UID} --ingroup ors ors && \
+RUN addgroup -g ${GID} ors && \
+    adduser -D -h ${BASE_FOLDER} -u ${UID} -G ors ors && \
     mkdir -p ${BASE_FOLDER}/ors-core/logs ${BASE_FOLDER}/ors-conf ${BASE_FOLDER}/ors-core/data ${BASE_FOLDER}/tomcat/logs && \
-    chown -R ors:ors ${BASE_FOLDER}/tomcat ${BASE_FOLDER}/ors-core/logs ${BASE_FOLDER}/ors-conf ${BASE_FOLDER}/ors-core/data ${BASE_FOLDER}/tomcat/logs && \
-    rm -rf /var/lib/apt/lists/*
+    chown -R ors ${BASE_FOLDER}/tomcat ${BASE_FOLDER}/ors-core/logs ${BASE_FOLDER}/ors-conf ${BASE_FOLDER}/ors-core/data ${BASE_FOLDER}/tomcat/logs
+
 
 WORKDIR ${BASE_FOLDER}
 
@@ -82,6 +115,7 @@ COPY --chown=ors:ors --from=build /ors-core/ors-api/target/ors.war ${BASE_FOLDER
 COPY --chown=ors:ors --from=build /ors-core/ors-api/src/main/resources/log4j.properties ${BASE_FOLDER}/tomcat/conf/logging.properties
 COPY --chown=ors:ors ./docker-entrypoint.sh ${BASE_FOLDER}/docker-entrypoint.sh
 COPY --chown=ors:ors ./ors-api/ors-config.yml ${BASE_FOLDER}/tmp/ors-config.yml
+
 
 USER ${UID}:${GID}
 
