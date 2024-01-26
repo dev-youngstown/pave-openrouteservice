@@ -66,37 +66,68 @@ ENV LANG='en_US' LANGUAGE='en_US' LC_ALL='en_US'
 
 # Install dependencies required for osm2pgsql
 RUN apk add --no-cache bash=~'5' openssl=~'3' \
-    git \
-    build-base \
-    cmake \
-    boost-dev \
-    expat-dev \
-    bzip2-dev \
-    zlib-dev \
-    lua-dev \
-    proj-dev \
-    geos-dev \
-    gdal-dev \
-    postgresql-dev
+   libgcc \
+	libstdc++ \
+	boost-filesystem \
+	boost-system \
+	boost-thread \
+	expat \
+	libbz2 \
+	postgresql-libs \
+	libpq \
+	geos@testing \
+	proj4@testing \
+	lua5.2 \
+	lua5.2-libs
 
-# Clone Nlohmann JSON repository
-RUN git clone https://github.com/nlohmann/json.git /tmp/json
+RUN apk add --no-cache \
+	make \
+	cmake \
+	expat-dev \
+	g++ \
+	git \
+	boost-dev \
+	zlib-dev \
+	bzip2-dev \
+	proj4-dev@testing \
+	geos-dev@testing \
+	lua5.2-dev \
+	postgresql-dev &&\
+	cd $HOME &&\
+	mkdir src &&\
+	cd src &&\
+	git clone https://github.com/openstreetmap/osm2pgsql.git &&\
+	cd osm2pgsql &&\
+	mkdir build &&\
+	cd build &&\
+	cmake -DLUA_LIBRARY=/usr/lib/liblua-5.2.so.0 .. &&\
+	make &&\
+	make install &&\
+	cd $HOME &&\
+	rm -rf src &&\
+	apk --purge del \
+	make \
+	cmake \
+	git \
+	g++ \
+	boost-dev \
+	gdbm \
+	python3 \
+	boost-python3 \
+	python \
+	binutils \
+	gcc \
+	lua5.2-dev \
+	bzip2-dev \
+	expat-dev \
+	musl-dev \
+	libc-dev \
+	zlib-dev \
+	openssl-dev \
+	postgresql-dev \
+	proj4-dev
 
-# Clone the osm2pgsql source code
-RUN git clone https://github.com/openstreetmap/osm2pgsql.git /tmp/osm2pgsql
 
-# Specify the Nlohmann JSON include directory for CMake and compile osm2pgsql
-RUN cd /tmp/osm2pgsql && \
-    mkdir build && \
-    cd build && \
-    cmake -DNLOHMANN_JSON_INCLUDE_DIR=/tmp/json/single_include .. && \
-    make && \
-    make install
-
-# Cleanup
-RUN apk del git build-base cmake && \
-    rm -rf /tmp/osm2pgsql /tmp/json && \
-    rm -rf /var/cache/apk/*
 
 # Setup the target system with the right user and folders.
 RUN addgroup -g ${GID} ors && \
