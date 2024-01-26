@@ -79,20 +79,23 @@ RUN apk add --no-cache bash=~'5' openssl=~'3' \
     gdal-dev \
     postgresql-dev
 
-# Manually download and install Nlohmann JSON library
-RUN wget https://github.com/nlohmann/json/releases/download/v3.10.5/json.hpp -O /usr/include/json.hpp
+# Clone Nlohmann JSON repository
+RUN git clone https://github.com/nlohmann/json.git /tmp/json
 
-# Clone the osm2pgsql source code and compile
-RUN git clone https://github.com/openstreetmap/osm2pgsql.git /tmp/osm2pgsql && \
-    mkdir /tmp/osm2pgsql/build && \
-    cd /tmp/osm2pgsql/build && \
-    cmake .. && \
+# Clone the osm2pgsql source code
+RUN git clone https://github.com/openstreetmap/osm2pgsql.git /tmp/osm2pgsql
+
+# Specify the Nlohmann JSON include directory for CMake and compile osm2pgsql
+RUN cd /tmp/osm2pgsql && \
+    mkdir build && \
+    cd build && \
+    cmake -DNLOHMANN_JSON_INCLUDE_DIR=/tmp/json/single_include .. && \
     make && \
     make install
 
 # Cleanup
 RUN apk del git build-base cmake && \
-    rm -rf /tmp/osm2pgsql && \
+    rm -rf /tmp/osm2pgsql /tmp/json && \
     rm -rf /var/cache/apk/*
 
 # Setup the target system with the right user and folders.
