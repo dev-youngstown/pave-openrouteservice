@@ -65,7 +65,19 @@ ENV CATALINA_PID=${BASE_FOLDER}/tomcat/temp/tomcat.pid
 ENV LANG='en_US' LANGUAGE='en_US' LC_ALL='en_US'
 
 # Install dependencies required for osm2pgsql
-RUN apk add --no-cache bash=~'5' openssl=~'3' 
+RUN apk add --no-cache bash=~'5' openssl=~'3' \
+    git \
+    build-base \
+    cmake \
+    boost-dev \
+    expat-dev \
+    bzip2-dev \
+    zlib-dev \
+    lua-dev \
+    proj-dev \
+    geos-dev \
+    gdal-dev \
+    postgresql-dev
 
 RUN apk add --no-cache \
 	make \
