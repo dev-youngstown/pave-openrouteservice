@@ -65,7 +65,7 @@ DB_HOST=${NF_PAVE_GISDB_HOST}
 DB_PORT=${NF_PAVE_GISDB_PORT}
 
 # Import OSM data into PostgreSQL using environment variables
-echo "Importing OSM data into PostgreSQL"
+echo "Importing OSM data into ${DB_NAME}"
 echo $DB_PASS | osm2pgsql -c -d $DB_NAME -U $DB_USER -W -H $DB_HOST -P $DB_PORT  -G --hstore /path/to/default.style ${ors_base}/ors-core/data/osm_file.pbf
 
 # so docker can stop the process gracefully
