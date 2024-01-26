@@ -79,6 +79,8 @@ RUN apk add --no-cache bash=~'5' openssl=~'3' \
     gdal-dev \
     postgresql-dev
 
+# Manually download and install Nlohmann JSON library
+RUN wget https://github.com/nlohmann/json/releases/download/v3.10.5/json.hpp -O /usr/include/json.hpp
 
 # Clone the osm2pgsql source code and compile
 RUN git clone https://github.com/openstreetmap/osm2pgsql.git /tmp/osm2pgsql && \
