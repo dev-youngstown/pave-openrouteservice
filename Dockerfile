@@ -7,12 +7,14 @@ ARG DEBIAN_FRONTEND=noninteractive
 # hadolint ignore=DL3002
 USER root
 
-# Install dependencies and locales
+# Install dependencies and locales and osm2pgsql
 # hadolint ignore=DL3008
 RUN apt-get update -qq && \
-    apt-get install -qq -y --no-install-recommends nano moreutils jq wget && \
+    apt-get install -qq -y --no-install-recommends nano moreutils jq wget osm2pgsql && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+    
+
 
 FROM base as tomcat
 ARG TOMCAT_MAJOR=10
