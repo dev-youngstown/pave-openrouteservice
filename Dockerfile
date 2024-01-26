@@ -79,13 +79,6 @@ RUN apk add --no-cache bash=~'5' openssl=~'3' \
     gdal-dev \
     postgresql-dev
 
-# Clone the osm2pgsql source code and compile
-RUN git clone https://github.com/openstreetmap/osm2pgsql.git /tmp/osm2pgsql && \
-    mkdir /tmp/osm2pgsql/build && \
-    cd /tmp/osm2pgsql/build && \
-    cmake .. && \
-    make && \
-    make install
 
 # Clone the osm2pgsql source code and compile
 RUN git clone https://github.com/openstreetmap/osm2pgsql.git /tmp/osm2pgsql && \
