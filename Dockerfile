@@ -76,8 +76,8 @@ RUN apk add --no-cache \
 	boost-dev \
 	zlib-dev \
 	bzip2-dev \
-	proj4-dev@testing \
-	geos-dev@testing \
+	proj4-dev \
+	geos-dev \
 	lua5.2-dev \
 	postgresql-dev &&\
 	cd $HOME &&\
