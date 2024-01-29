@@ -66,7 +66,7 @@ DB_PORT=${NF_PAVE_GISDB_PORT}
 
 # Import OSM data into PostgreSQL using environment variables
 echo "Importing OSM data into ${DB_NAME}"
-echo $DB_PASS | osm2pgsql -c -d $DB_NAME -U $DB_USER -W -H $DB_HOST -P $DB_PORT -s -C 8192 -G --hstore ${ors_base}/ors-core/data/osm_file.pbf
+echo $DB_PASS | osm2pgsql -c -d $DB_NAME -U $DB_USER -W -H $DB_HOST -P $DB_PORT -C 8192 -G --hstore ${ors_base}/ors-core/data/osm_file.pbf
 
 # so docker can stop the process gracefully
 exec "${catalina_base}"/bin/catalina.sh run
