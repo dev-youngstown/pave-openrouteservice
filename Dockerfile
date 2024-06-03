@@ -88,7 +88,7 @@ COPY --chown=ors:ors ./ors-api/ors-config.yml ${BASE_FOLDER}/tmp/ors-config.yml
 
 USER ${UID}:${GID}
 
-ENV BUILD_GRAPHS="False"
+ENV BUILD_GRAPHS="True"
 ENV ORS_CONFIG_LOCATION=ors-conf/ors-config.yml
 
 # Start the container
