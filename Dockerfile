@@ -62,7 +62,7 @@ ENV CATALINA_HOME=${BASE_FOLDER}/tomcat
 ENV CATALINA_PID=${BASE_FOLDER}/tomcat/temp/tomcat.pid
 
 # Set the default language
-ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
+ENV LANG='en_US' LANGUAGE='en_US' LC_ALL='en_US'
 
 # Setup the target system with the right user and folders.
 RUN apt-get update && \
