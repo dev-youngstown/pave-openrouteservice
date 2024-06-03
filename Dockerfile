@@ -53,7 +53,7 @@ FROM ubuntu:latest as publish
 
 # Build ARGS
 ARG UID=1000
-ARG GID=1000
+ARG GID=1001
 ARG BASE_FOLDER=/home/ors
 
 # Runtime ENVs for tomcat
