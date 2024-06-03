@@ -49,7 +49,7 @@ COPY ors-report-aggregation /ors-core/ors-report-aggregation
 RUN mvn package -DskipTests -pl '!ors-report-aggregation'
 
 # build final image, just copying stuff inside
-FROM ubuntu:latest as publish
+FROM ubuntu:22.04 as publish
 
 # Build ARGS
 ARG UID=1000
