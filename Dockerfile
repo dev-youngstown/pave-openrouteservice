@@ -66,9 +66,9 @@ ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 # Setup the target system with the right user and folders.
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends bash openssl osm2pgsql locales openjdk-17-jdk && \
+    apt-get install -y --no-install-recommends bash openssl osm2pgsql locales openjdk-17-jdk wget && \
     locale-gen en_US.UTF-8 && \
-    groupadd --gid ${GID} ors && \
+    addgroup --gid ${GID} ors && \
     adduser --disabled-password --gecos '' --home ${BASE_FOLDER} --uid ${UID} --ingroup ors ors && \
     mkdir -p ${BASE_FOLDER}/ors-core/logs ${BASE_FOLDER}/ors-conf ${BASE_FOLDER}/ors-core/data ${BASE_FOLDER}/tomcat/logs && \
     chown -R ors:ors ${BASE_FOLDER}/tomcat ${BASE_FOLDER}/ors-core/logs ${BASE_FOLDER}/ors-conf ${BASE_FOLDER}/ors-core/data ${BASE_FOLDER}/tomcat/logs && \
