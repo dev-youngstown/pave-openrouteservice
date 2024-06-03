@@ -63,9 +63,9 @@ if [ "${BUILD_GRAPHS}" = "True" ]; then
   DB_HOST=${NF_ORS_GISDB_HOST}
   DB_PORT=${NF_ORS_GISDB_PORT}
   
-  # Import OSM data into PostgreSQL using environment variables
-  echo "Importing OSM data into ${DB_NAME}"
-  echo $DB_PASS | osm2pgsql -c -d $DB_NAME -U $DB_USER -W -H $DB_HOST -P $DB_PORT -C 16384 -G --hstore ${ors_base}/ors-core/data/osm_file.pbf
+  # Import OSM data into PostgreSQL using environment variables. Uncomment to import new data into the gisdb
+  # echo "Importing OSM data into ${DB_NAME}"
+  # echo $DB_PASS | osm2pgsql -c -d $DB_NAME -U $DB_USER -W -H $DB_HOST -P $DB_PORT -C 16384 -G --hstore ${ors_base}/ors-core/data/osm_file.pbf
 fi
 
 
