@@ -62,14 +62,14 @@ ENV CATALINA_HOME=${BASE_FOLDER}/tomcat
 ENV CATALINA_PID=${BASE_FOLDER}/tomcat/temp/tomcat.pid
 
 # Set the default language
-ENV LANG='en_US' LANGUAGE='en_US' LC_ALL='en_US'
+ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 # Setup the target system with the right user and folders.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends bash openssl osm2pgsql locales openjdk-17-jdk && \
     locale-gen en_US.UTF-8 && \
-    addgroup --gid ${GID} ors && \
-    adduser --disabled-password --gecos '' --home ${BASE_FOLDER} --uid ${UID} --ingroup ors ors && \
+    groupadd --gid ${GID} ors && \
+    useradd --disabled-password --gecos '' --home ${BASE_FOLDER} --uid ${UID} --ingroup ors ors && \
     mkdir -p ${BASE_FOLDER}/ors-core/logs ${BASE_FOLDER}/ors-conf ${BASE_FOLDER}/ors-core/data ${BASE_FOLDER}/tomcat/logs && \
     chown -R ors:ors ${BASE_FOLDER}/tomcat ${BASE_FOLDER}/ors-core/logs ${BASE_FOLDER}/ors-conf ${BASE_FOLDER}/ors-core/data ${BASE_FOLDER}/tomcat/logs && \
     rm -rf /var/lib/apt/lists/*
