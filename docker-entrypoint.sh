@@ -52,10 +52,12 @@ if [ ! -f "${ors_base}/ors-conf/ors-config.yml" ]; then
   cp -f "${ors_base}/tmp/ors-config.yml" "${ors_base}/ors-conf/ors-config.yml"
 fi
 
-if [ "${BUILD_GRAPHS}" = "True" ]; then
+if [ ! -f "${ors_base}/ors-core/data/osm_file.pbf" ]; then
   echo "download osm_file.pbf"
   wget https://download.geofabrik.de/north-america/us-latest.osm.pbf -O ${ors_base}/ors-core/data/osm_file.pbf
-  
+fi
+
+if [ "${BUILD_GRAPHS}" = "True" ]; then
   Using environment variables for database details
   DB_NAME=${NF_ORS_GISDB_DATABASE}
   DB_USER=${NF_ORS_GISDB_USERNAME}
